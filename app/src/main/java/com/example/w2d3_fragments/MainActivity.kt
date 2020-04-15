@@ -3,22 +3,31 @@ package com.example.w2d3_fragments
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), GreenFragment.OnMessageListener {
+
+    lateinit var blueFragment: BlueFragment
+    lateinit var greenFragment: GreenFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 1
         if (savedInstanceState == null) {
-            // 2
+            greenFragment = GreenFragment.newInstance()
             supportFragmentManager
-                // 3
                 .beginTransaction()
-                // 4
-                .add(R.id.details, DogDetailsFragment.newInstance(), "dogDetails")
-                // 5
+                .add(R.id.blue_fragment_container, greenFragment, "green")
+                .commit()
+
+            blueFragment = BlueFragment.newInstance()
+                supportFragmentManager
+                .beginTransaction()
+                .add(R.id.green_fragment_container, blueFragment, "blue")
                 .commit()
         }
+    }
+
+    override fun onMessageSend(message: String) {
+        blueFragment.updateText(message)
     }
 }
